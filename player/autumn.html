@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Autumn Ablaze</title>
+<meta property="og:title" content="Autumn Ablaze">
+<meta property="og:description" content="A lone maple blazes crimson and gold above a glass-still alpine lake.">
+<meta property="og:image" content="https://cjmjnc.github.io/assets/cards/autumn_poster.jpg">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: "Segoe UI", system-ui, sans-serif; }
+  video { position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; background: #000; }
+  @media (max-aspect-ratio: 4/3) { video { object-fit: contain; } }
+  .veil { position: fixed; left: 0; right: 0; bottom: 0; padding: 48px 6vw 7vh;
+          background: linear-gradient(transparent, rgba(0,0,0,.72)); color: #fff;
+          transition: opacity 1.6s ease; pointer-events: none; }
+  .veil h1 { margin: 0 0 .35em; font-size: clamp(28px, 5vw, 64px); font-weight: 700; letter-spacing: .02em;
+             text-shadow: 0 2px 18px rgba(0,0,0,.6); }
+  .veil p { margin: 0; max-width: 46em; font-size: clamp(14px, 1.7vw, 21px); line-height: 1.45; opacity: .92; }
+  .faded { opacity: 0; }
+  button { position: fixed; top: 18px; right: 18px; z-index: 2; border: 1px solid rgba(255,255,255,.35);
+           background: rgba(0,0,0,.45); color: #fff; border-radius: 999px; padding: 10px 18px; font-size: 15px;
+           cursor: pointer; backdrop-filter: blur(6px); }
+  button:hover { background: rgba(0,0,0,.65); }
+</style>
+</head>
+<body>
+<video id="v" autoplay muted loop playsinline preload="auto" poster="../cards/autumn_poster.jpg">
+  <source src="../cards/autumn_live_1080p.mp4" type="video/mp4">
+</video>
+<button id="snd" type="button" aria-label="Turn sound on">&#128266; Tap for sound</button>
+<div class="veil" id="veil">
+  <h1>Autumn Ablaze</h1>
+  <p>A lone maple blazes crimson and gold above a glass-still alpine lake. As the last light breaks through the peaks, the wind lifts a storm of glowing leaves, and the whole valley is mirrored perfectly in the water below.</p>
+</div>
+<script>
+  const v = document.getElementById('v'), b = document.getElementById('snd'), veil = document.getElementById('veil');
+  v.play().catch(() => {});                       // muted autoplay is allowed by every modern browser
+  b.addEventListener('click', () => {
+    v.muted = !v.muted;
+    if (!v.muted) { v.volume = 0.8; v.play(); }
+    b.innerHTML = v.muted ? '&#128266; Tap for sound' : '&#128263; Mute';
+  });
+  setTimeout(() => veil.classList.add('faded'), 6500);
+  document.addEventListener('mousemove', () => { veil.classList.remove('faded'); clearTimeout(window.t);
+    window.t = setTimeout(() => veil.classList.add('faded'), 3500); });
+</script>
+</body>
+</html>
