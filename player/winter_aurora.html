@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Winter Aurora</title>
 <meta property="og:title" content="Winter Aurora">
-<meta property="og:description" content="Under a sky alive with emerald and violet aurora, a lone cabin glows amber in a silent, snow-laden forest. Fresh snow drifts down through the starlight as the lights dance across t">
+<meta property="og:description" content="Under a sky alive with emerald and violet aurora, a lone cabin glows amber in a silent, snow-laden forest. Fresh snow drifts down through the starlight as the lights dance across the frozen lake.">
 <meta property="og:image" content="https://cjmjnc.github.io/assets/cards/winter_aurora_poster.jpg">
 <style>
   :root { color-scheme: dark; }
@@ -29,6 +29,7 @@
 <video id="v" autoplay muted loop playsinline preload="auto" poster="../cards/winter_aurora_poster.jpg">
   <source src="../cards/winter_aurora_live_1080p.mp4" type="video/mp4">
 </video>
+<audio id="amb" src="../cards/winter_ambience.m4a" loop preload="auto"></audio>
 <button id="snd" type="button" aria-label="Turn sound on">&#128266; Tap for sound</button>
 <div class="veil" id="veil">
   <h1>Winter Aurora</h1>
@@ -37,10 +38,15 @@
 <script>
   const v = document.getElementById('v'), b = document.getElementById('snd'), veil = document.getElementById('veil');
   v.play().catch(() => {});                       // muted autoplay is allowed by every modern browser
+  // Sound = a separate CC0 field-recorded ambience on its own 47.6 s loop (independent of the 8 s picture loop), faded in/out.
+  const a = document.getElementById('amb'); let on = false, fadeT;
+  function fade(to, ms) { clearInterval(fadeT); const from = a.volume, t0 = performance.now();
+    fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); a.volume = from + (to - from) * k;
+      if (k >= 1) { clearInterval(fadeT); if (to === 0) a.pause(); } }, 30); }
   b.addEventListener('click', () => {
-    v.muted = !v.muted;
-    if (!v.muted) { v.volume = 0.8; v.play(); }
-    b.innerHTML = v.muted ? '&#128266; Tap for sound' : '&#128263; Mute';
+    on = !on;
+    if (on) { a.volume = 0; a.play(); fade(0.9, 1500); b.innerHTML = '&#128263; Mute'; }
+    else { fade(0, 800); b.innerHTML = '&#128266; Tap for sound'; }
   });
   setTimeout(() => veil.classList.add('faded'), 6500);
   document.addEventListener('mousemove', () => { veil.classList.remove('faded'); clearTimeout(window.t);
